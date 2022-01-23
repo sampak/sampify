@@ -2,7 +2,7 @@ import Playlist from "../../components/Playlist";
 function Liked(){
   return (
     <>
-      <Playlist />
+      <Playlist refetch={() => {}} songs={[]} />
     </>
   )
 }

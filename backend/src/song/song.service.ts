@@ -20,7 +20,7 @@ export class SongService {
   async insert(file){
     const splittedName = file.originalname.split('.');
     const fileName = splittedName[0] ?? file.originalname;
-    const fileType = splittedName.split('.')[splittedName.split('.').length - 1] ?? 'mp3';
+    const fileType = splittedName[splittedName.length - 1] ?? 'mp3';
     const duration = await getMP3Duration(file.buffer);
     try {
     const songInsert = this.songRepository.create();
@@ -34,7 +34,7 @@ export class SongService {
     try {
       await fs.mkdirSync(`public/${result.guid}`); 
       await fs.writeFileSync(`public/${result.guid}/raw.${fileType}`, file.buffer) // Add checking file type
-      return true
+      return result;
     } catch(e) {
       console.error('folder creation failed');
       this.songRepository.delete({guid: result.guid});

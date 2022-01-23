@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 
 
+interface ActiveElement {
+  active?: boolean
+}
+
 export const Playlist = styled.div`
   display: inline-block;
   position: relative;
@@ -10,6 +14,37 @@ export const Playlist = styled.div`
   color: ${colors.fonts.gray};
   padding-left: 5rem;
   padding-right: 5rem;
+`;
+
+export const DragAndDrop = styled.div<ActiveElement>`
+  position: absolute;
+  display: ${props => (props.active ? 'block' : 'none')};
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+
+export const Animation = styled.div`
+  position: relative;
+  width: 40rem;
+  height: 40rem;
+  left: 0;
+  top: 0;
+  margin-left: 50%;
+  margin-top: 10rem;
+  transform: translateX(-50%);
+`;
+
+export const UploadText = styled.div`
+  position: relative;
+  width: 100%;
+  color: white;
+  font-size: 4rem;
+  text-align: center;
 `;
 
 export const PlaylistData = styled.div`

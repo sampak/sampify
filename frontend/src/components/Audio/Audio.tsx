@@ -22,7 +22,7 @@ function Audio(){
       return;
     }
 
-    if(playerSong.state === PLAYER_STATUS.WAITING_TOP_STOPPED && player.current.isPlaying() === true){
+    if(playerSong.state === PLAYER_STATUS.WAITING_TO_STOPPED && player.current.isPlaying() === true){
       player.current.audio.current.pause();
       return;
     }
@@ -42,7 +42,7 @@ function Audio(){
     showFilledVolume={true}
     src={playerSong.blob ?? ''}
     onPlay={() => dispatch(setPlayerState(PLAYER_STATUS.PLAYING))}
-    onEnded={() => dispatch(setPlayerState(PLAYER_STATUS.STOPPED))}
+    onEnded={() => dispatch(setPlayerState(PLAYER_STATUS.WAITING_FOR_CHANGE))}
     onPause={() => dispatch(setPlayerState(PLAYER_STATUS.STOPPED))}
     // other props here
     />

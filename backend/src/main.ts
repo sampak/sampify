@@ -4,6 +4,14 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import * as fs from 'fs';
+
+async function createPublicFolder(){
+  if (!fs.existsSync('public')) {
+    fs.mkdirSync('public');
+    console.log('Creating public folder');
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +36,7 @@ async function bootstrap() {
     exposedHeaders: ['Content-Length', 'Content-Range', 'Content-Size']
     
   });
+  await createPublicFolder();
   app.use('/public', express.static(join(__dirname, '..', 'public')));
   await app.listen(4000);
 }

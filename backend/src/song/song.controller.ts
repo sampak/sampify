@@ -26,7 +26,7 @@ export class SongController {
     if(result === false) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Internal Server error');
     }
-    return res.status(HttpStatus.OK).send('');
+    return res.status(HttpStatus.OK).send(result);
   }
 
 }

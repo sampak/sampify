@@ -6,9 +6,10 @@ import useMusic from '../../hooks/useMusic';
 import { useSelector } from 'react-redux';
 import { PLAYER_STATUS } from '../../reducers/PlayerSong';
 
+import Song from '../../interfaces/Song';
+import {millisToMinutesAndSeconds} from '../../utils/duration';
 
-
-function SongList({ LikedSongs }: { LikedSongs:any }){
+function SongList({ songs }: { songs:Song[] }){
   const player:any = useSelector((state: any) => state.PlayerSong);
   const MusicHook = useMusic();
 
@@ -30,11 +31,11 @@ function SongList({ LikedSongs }: { LikedSongs:any }){
 
       <SC.List>
 
-        {
-          LikedSongs.map((song:any) => (
-            <SC.ListBox key={song.id} active={(player.musicID === song.id )}>
-              <SC.Id onClick={() => {  handleClickStart(song.id); }}>
-                { player.musicID === song.id && player.state === PLAYER_STATUS.PLAYING ? (
+        {songs && ( 
+          songs.map((song) => (
+            <SC.ListBox key={song.guid} active={(player.musicID === song.guid )}>
+              <SC.Id onClick={() => {  handleClickStart(song.guid); }}>
+                { player.musicID === song.guid && player.state === PLAYER_STATUS.PLAYING ? (
                   <FontAwesomeIcon icon={faPause} />
                 ) : (
                   <FontAwesomeIcon icon={faPlay} />
@@ -42,12 +43,12 @@ function SongList({ LikedSongs }: { LikedSongs:any }){
                 
                 </SC.Id>
               <SC.Title>{song.title}</SC.Title>
-              <SC.Artist>{song.artist}</SC.Artist>
-              <SC.Album>{song.album}</SC.Album>
+              <SC.Artist></SC.Artist>
+              <SC.Album></SC.Album>
               <SC.AddDate style={{textAlign: 'center'}}>{song.addTime}</SC.AddDate>
-              <SC.Length style={{textAlign: 'center'}}>{song.length}</SC.Length>
+              <SC.Length style={{textAlign: 'center'}}>{millisToMinutesAndSeconds(song.duration)}</SC.Length>
             </SC.ListBox> 
-          ))}
+          )))}
       </SC.List>
     </SC.SongList>
   );
