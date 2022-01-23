@@ -37,7 +37,7 @@ export class AppController {
       "Accept-Ranges": "bytes",
       "Content-Length": contentLength,
       "Content-Size": soundSize,
-      "Content-Type": "video/mpeg",
+      "Content-Type": "audio/mpeg",
     };
 
     console.log(` ${start}-${end}/${soundSize}`);
