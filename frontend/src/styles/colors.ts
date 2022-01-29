@@ -14,9 +14,7 @@ const colors = {
   fonts: {
     dirtyWhite: '#aaaaaa',
     gray: '#646464',
-  }
-
-
+  },
 }
 
-export default colors;
+export default colors

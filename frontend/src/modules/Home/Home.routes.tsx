@@ -1,8 +1,6 @@
-import { Route } from "react-router-dom";
-import Home from "./Home";
+import { Route } from 'react-router-dom'
+import Home from './Home'
 
-const HomeRoutes = (
-  <Route path="/" element={<Home />} />
-);
+const HomeRoutes = <Route path="/" element={<Home />} />
 
-export default HomeRoutes;
+export default HomeRoutes

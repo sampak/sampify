@@ -5,7 +5,6 @@ $rhap_time-color: white;
 $rhap_font-family: inherit;
 $rhap_hover-color: red;
 
-
 .rhap_container {
   box-sizing: border-box;
   display: flex;
@@ -92,8 +91,7 @@ $rhap_hover-color: red;
     outline: 0;
   }
 
-  &:hover
-  {
+  &:hover {
     .rhap_progress-filled {
       background: $rhap_hover-color;
     }
@@ -103,7 +101,6 @@ $rhap_hover-color: red;
     }
   }
 }
-
 
 .rhap_time {
   color: $rhap_time-color;
@@ -131,7 +128,7 @@ $rhap_hover-color: red;
 }
 
 .rhap_progress-bar-show-download {
-  background-color: fade($rhap_bar-color, (0.5*100));
+  background-color: fade($rhap_bar-color, (0.5 * 100));
 }
 
 .rhap_download-progress {
@@ -152,7 +149,7 @@ $rhap_hover-color: red;
   top: -8px;
   background: $rhap_theme-color;
   border-radius: 50px;
-  box-shadow: fade($rhap_theme-color, (.5*100)) 0 0 5px;
+  box-shadow: fade($rhap_theme-color, (0.5 * 100)) 0 0 5px;
 }
 
 .rhap_controls-section {
@@ -195,7 +192,6 @@ $rhap_hover-color: red;
   font-size: 40px;
   width: 40px;
   height: 40px;
-  
 }
 
 .rhap_volume-controls {
@@ -254,11 +250,11 @@ $rhap_hover-color: red;
   background: $rhap_theme-color;
   opacity: 0.9;
   border-radius: 50px;
-  box-shadow: fade($rhap_theme-color, (.5*100)) 0 0 3px;
+  box-shadow: fade($rhap_theme-color, (0.5 * 100)) 0 0 3px;
   cursor: pointer;
 
   &:hover {
-    opacity: .9;
+    opacity: 0.9;
   }
 }
 
@@ -279,12 +275,12 @@ $rhap_hover-color: red;
   cursor: pointer;
 
   &:hover {
-    opacity: .9;
-    transition-duration: .2s;
+    opacity: 0.9;
+    transition-duration: 0.2s;
   }
 
   &:active {
-    opacity: .95;
+    opacity: 0.95;
   }
 
   &:focus:not(:focus-visible) {

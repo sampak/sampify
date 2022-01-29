@@ -3,7 +3,7 @@ const fonts = {
     bold: 'RobotoBold',
     medium: 'RobotoMedium',
     regular: 'RobotoRegular',
-  }
+  },
 }
 
-export default fonts;
+export default fonts

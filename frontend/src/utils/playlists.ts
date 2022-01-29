@@ -1,29 +1,41 @@
-import { Playlist } from "../interfaces/Playlist";
+import { Playlist } from '../interfaces/Playlist'
 
-export const getNextSong = (playlists: Playlist[], activePlaylistGuid: string, activeSongGuid: string|null) => { 
-  const playlist = playlists.find(playlist => activePlaylistGuid === playlist.playlistGuid);
+export const getNextSong = (
+  playlists: Playlist[],
+  activePlaylistGuid: string,
+  activeSongGuid: string | null
+) => {
+  const playlist = playlists.find(
+    (playlist) => activePlaylistGuid === playlist.playlistGuid
+  )
 
-  if(playlist) {
-    const songs = playlist.songs ?? [];
-    const index = songs.findIndex(song => ( activeSongGuid === song.guid));
-    const newSong = songs[index + 1] ?? null;
-    if(!newSong) {
-      return songs[0];
-    } 
-    return newSong;
+  if (playlist) {
+    const songs = playlist.songs ?? []
+    const index = songs.findIndex((song) => activeSongGuid === song.guid)
+    const newSong = songs[index + 1] ?? null
+    if (!newSong) {
+      return songs[0]
+    }
+    return newSong
   }
-  return null;
+  return null
 }
 
-export const getPreviouslySong = (playlists: Playlist[], activePlaylistGuid: string, activeSongGuid: string|null) => {
-  const playlist = playlists.find(playlist => activePlaylistGuid === playlist.playlistGuid);
-  if(playlist) {
-    const songs = playlist.songs ?? [];
-    const index = songs.findIndex(song => ( activeSongGuid === song.guid));
-    const newSong = songs[index - 1] ?? null;
-    if(newSong) {
-      return newSong;
-    } 
+export const getPreviouslySong = (
+  playlists: Playlist[],
+  activePlaylistGuid: string,
+  activeSongGuid: string | null
+) => {
+  const playlist = playlists.find(
+    (playlist) => activePlaylistGuid === playlist.playlistGuid
+  )
+  if (playlist) {
+    const songs = playlist.songs ?? []
+    const index = songs.findIndex((song) => activeSongGuid === song.guid)
+    const newSong = songs[index - 1] ?? null
+    if (newSong) {
+      return newSong
+    }
   }
-  return null;
+  return null
 }

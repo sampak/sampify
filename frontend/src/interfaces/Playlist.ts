@@ -1,6 +1,6 @@
-import Song from "./Song";
+import Song from './Song'
 
 export interface Playlist {
-  playlistGuid: string,
+  playlistGuid: string
   songs?: Song[]
 }

@@ -1,8 +1,6 @@
-import { Route } from "react-router-dom";
-import Login from "./Login";
+import { Route } from 'react-router-dom'
+import Login from './Login'
 
-const AuthRoutes = (
-  <Route path="/login" element={<Login />} />
-);
+const AuthRoutes = <Route path="/login" element={<Login />} />
 
-export default AuthRoutes;
+export default AuthRoutes

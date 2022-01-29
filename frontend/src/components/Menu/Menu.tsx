@@ -1,31 +1,45 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faSearch, faStream, faCompactDisc, faHeart } from '@fortawesome/free-solid-svg-icons'
-import * as SC from './Menu.styled';
-import Avatar from '../../assets/avatar.jpg';
-import { Link, useLocation } from 'react-router-dom';
-function Menu(){
-  const location = useLocation();
-  const [mouseOnUser, setMouseOnUser] = useState(false);
+import {
+  faHome,
+  faSearch,
+  faStream,
+  faCompactDisc,
+  faHeart,
+} from '@fortawesome/free-solid-svg-icons'
+import * as SC from './Menu.styled'
+import Avatar from '../../assets/avatar.jpg'
+import { Link, useLocation } from 'react-router-dom'
+function Menu() {
+  const location = useLocation()
+  const [mouseOnUser, setMouseOnUser] = useState(false)
 
   return (
     <SC.Menu>
-      <SC.User mouseIn={mouseOnUser} onMouseEnter={() => { setMouseOnUser(true) }}  onMouseLeave={() => { setMouseOnUser(false) }}>
+      <SC.User
+        mouseIn={mouseOnUser}
+        onMouseEnter={() => {
+          setMouseOnUser(true)
+        }}
+        onMouseLeave={() => {
+          setMouseOnUser(false)
+        }}
+      >
         <SC.Avatar mouseIn={mouseOnUser} src={Avatar} />
       </SC.User>
 
       <SC.Options>
         <Link to={'/'}>
-          <SC.Option active={ (location.pathname === '/') }>
+          <SC.Option active={location.pathname === '/'}>
             <FontAwesomeIcon icon={faHome} />
             <SC.OptionLabel>Home</SC.OptionLabel>
           </SC.Option>
         </Link>
         <Link to={'/liked'}>
-        <SC.Option active={ (location.pathname === '/liked') }>
-          <FontAwesomeIcon icon={faHeart} />
-          <SC.OptionLabel>Liked</SC.OptionLabel>
-        </SC.Option>
+          <SC.Option active={location.pathname === '/liked'}>
+            <FontAwesomeIcon icon={faHeart} />
+            <SC.OptionLabel>Liked</SC.OptionLabel>
+          </SC.Option>
         </Link>
         <SC.Option>
           <FontAwesomeIcon icon={faSearch} />
@@ -40,10 +54,8 @@ function Menu(){
           <SC.OptionLabel>Library</SC.OptionLabel>
         </SC.Option>
       </SC.Options>
-
-
     </SC.Menu>
-  );
+  )
 }
 
-export default Menu;
+export default Menu

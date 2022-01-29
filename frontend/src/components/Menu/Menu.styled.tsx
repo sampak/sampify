@@ -1,7 +1,6 @@
-import styled from 'styled-components';
-import colors from '../../styles/colors';
-import fonts from '../../styles/fonts';
-
+import styled from 'styled-components'
+import colors from '../../styles/colors'
+import fonts from '../../styles/fonts'
 
 export const Menu = styled.div`
   display: inline-block;
@@ -15,10 +14,10 @@ export const Menu = styled.div`
   overflow: hidden;
   border-bottom-left-radius: 5rem;
   border-bottom-right-radius: 5rem;
-`;
+`
 
 interface UserProps {
-  mouseIn?: boolean;
+  mouseIn?: boolean
 }
 
 export const User = styled.div<UserProps>`
@@ -31,15 +30,14 @@ export const User = styled.div<UserProps>`
   padding-left: ${(props) => (props.mouseIn ? '1rem' : '3rem')};
   padding-top: 2.4rem;
   transition: padding-left 0.5s;
-`;
+`
 
 export const Avatar = styled.img<UserProps>`
   width: ${(props) => (props.mouseIn ? '75%' : '100%')};
   height: ${(props) => (props.mouseIn ? '75%' : '100%')};
   border-radius: 1rem;
   transition: width 0.5s, height 0.5s;
-`;
-
+`
 
 export const Options = styled.div`
   display: grid;
@@ -47,10 +45,10 @@ export const Options = styled.div`
   text-align: center;
   padding-top: 2rem;
   flex-flow: wrap;
-`;
+`
 
 interface ActiveElement {
-  active?: boolean;
+  active?: boolean
 }
 
 export const Option = styled.div<ActiveElement>`
@@ -62,16 +60,17 @@ export const Option = styled.div<ActiveElement>`
   padding-bottom: 2rem;
   border-radius: 1rem;
 
-  background: ${(props) => (props.active ? 'rgba(16, 16, 16, 1)' : colors.gray)};
-  color: ${(props) => (props.active ? colors.white : colors.fonts.gray )};
+  background: ${(props) =>
+    props.active ? 'rgba(16, 16, 16, 1)' : colors.gray};
+  color: ${(props) => (props.active ? colors.white : colors.fonts.gray)};
 
   &:hover {
     background: rgba(16, 16, 16, 1);
     color: ${colors.white};
   }
-`;
+`
 
 export const OptionLabel = styled.div`
   padding-top: 0.4rem;
   font-weight: bold;
-`;
+`
