@@ -1,4 +1,3 @@
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { useRef, useEffect, useContext, useState } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
 import { useDispatch, useSelector } from 'react-redux'
@@ -82,7 +81,7 @@ function Audio() {
     MusicHook.fetch(song.guid, playerSong.activePlaylistGuid)
   }
 
-  const onVolumeChange = (e: any) => {
+  const onVolumeChange = () => {
     if (!player.current) return
     const newVolume = player.current.audio.current.volume
     localStorage.setItem('audio_volume', newVolume)

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import useMusic from '../../hooks/useMusic'
 import { Playlist } from '../../interfaces/Playlist'
@@ -28,7 +28,13 @@ export const AudioProvider = ({ children }: { children: any }) => {
       }
       MusicHook.fetch(song.guid, player.activePlaylistGuid)
     }
-  }, [player.state])
+  }, [
+    player.state,
+    MusicHook,
+    player.activePlaylistGuid,
+    player.activeSongGuid,
+    playlists,
+  ])
 
   return (
     <AudioContext.Provider value={player}>{children}</AudioContext.Provider>

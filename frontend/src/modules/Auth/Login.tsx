@@ -1,9 +1,9 @@
-import { ErrorMessage, Formik } from 'formik'
+import { Formik } from 'formik'
 import useAuth from '../../hooks/useAuth'
 import * as SC from './Login.styled'
 
 function Login() {
-  const { user, logIn, logout } = useAuth()
+  const { user, logIn } = useAuth()
 
   console.log(user)
   logIn()

@@ -1,12 +1,11 @@
-import { useState, useEffect, createContext } from 'react'
 // import axios from 'axios';
-import { Provider, useSelector } from 'react-redux'
+import { Provider } from 'react-redux'
 import { store } from './store'
 // import 'react-h5-audio-player/lib/styles.css';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import './styles/root.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes } from 'react-router-dom'
 import { AuthRoutes } from './modules/Auth'
 import { LikedRoutes } from './modules/Liked'
 import { HomeRoutes } from './modules/Home'
@@ -14,14 +13,6 @@ import Layout from './components/Layout'
 import Audio from './components/Audio/Audio'
 import { AudioProvider } from './components/AudioProvider'
 const queryClient = new QueryClient()
-
-interface AudioStoreProps {
-  blob: string | null
-}
-
-const DEFAULT_AUDIO_STORE: AudioStoreProps = {
-  blob: null,
-}
 
 function App() {
   return (

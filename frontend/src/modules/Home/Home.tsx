@@ -8,16 +8,16 @@ function Home() {
   const { data: songs, refetch: refetchHome } = useSongs()
   const dispatch = useDispatch()
   const playlists: any = useSelector((state: any) => state.Playlists)
+  const playlist = playlists.find(
+    (playlist: PlaylistInterface) => playlist.playlistGuid === 'ALL_SONGS'
+  )
 
   useEffect(() => {
-    const isPlaylist = playlists.find(
-      (playlist: PlaylistInterface) => playlist.playlistGuid === 'ALL_SONGS'
-    )
     const newPlaylist = {
       playlistGuid: 'ALL_SONGS',
       songs: songs ?? [],
     }
-    if (isPlaylist) {
+    if (playlist) {
       dispatch(updatePlaylist(newPlaylist))
       return
     }
@@ -29,7 +29,7 @@ function Home() {
     <Playlist
       playlistGuid={'ALL_SONGS'}
       refetch={refetchHome}
-      songs={songs ?? []}
+      songs={playlist?.songs ?? []}
     />
   )
 }

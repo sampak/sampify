@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faPlay,
@@ -30,7 +30,7 @@ interface PlaylistProps {
 function Playlist({ songs, playlistGuid, refetch }: PlaylistProps) {
   const [dragFile, setDragFile] = useState(false)
   const [sendingFile, setSendingFile] = useState(false)
-  const { mutate, isLoading } = useInsertSong()
+  const { mutate } = useInsertSong()
   const dispatch = useDispatch()
   const MusicHook = useMusic()
   const player: PlayerSongProps = useSelector((state: any) => state.PlayerSong)

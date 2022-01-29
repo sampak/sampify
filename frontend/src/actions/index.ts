@@ -2,7 +2,6 @@ import * as songReducer from '../reducers/PlayerSong'
 import * as playlistReducer from '../reducers/Playlists'
 
 import { Playlist } from '../interfaces/Playlist'
-import Song from '../interfaces/Song'
 
 export const setBlob = (song: any) => ({
   type: songReducer.actions.SET_BLOB,
