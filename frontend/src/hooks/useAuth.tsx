@@ -7,7 +7,6 @@ interface UseAuth {
 function useAuth(): UseAuth {
 
   const logIn = () => {
-    console.log('s');
     return true;
   }
 

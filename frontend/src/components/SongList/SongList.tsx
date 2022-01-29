@@ -3,18 +3,37 @@ import * as SC from './SongList.styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faCalendar, faClock, faPause } from '@fortawesome/free-solid-svg-icons';
 import useMusic from '../../hooks/useMusic';
-import { useSelector } from 'react-redux';
-import { PLAYER_STATUS } from '../../reducers/PlayerSong';
+import { useDispatch, useSelector } from 'react-redux';
+import { PlayerSongProps, PLAYER_STATUS } from '../../reducers/PlayerSong';
 
 import Song from '../../interfaces/Song';
 import {millisToMinutesAndSeconds} from '../../utils/duration';
+import { setPlayerState } from '../../actions';
 
-function SongList({ songs }: { songs:Song[] }){
-  const player:any = useSelector((state: any) => state.PlayerSong);
+function SongList({ songs, playlistGuid }: { songs:Song[], playlistGuid: string }){
+  const player:PlayerSongProps = useSelector((state: any) => state.PlayerSong);
+  const dispatch = useDispatch();
   const MusicHook = useMusic();
 
-  const handleClickStart = (songID: any) => {
-    MusicHook.fetch(songID);
+  const handleClickStart = (songGuid: any) => {
+
+    if(playlistGuid !== player.activePlaylistGuid){
+      dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED));
+      MusicHook.fetch(songGuid, playlistGuid);
+      return;
+    }
+
+    if(songGuid === player.activeSongGuid){
+      if(player.state === PLAYER_STATUS.STOPPED) {
+        dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STARTED));
+        return;
+      } 
+      if(player.state === PLAYER_STATUS.PLAYING) {
+        dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED));
+        return;
+      }
+    }
+    MusicHook.fetch(songGuid, playlistGuid);
   }
 
   return (
@@ -33,9 +52,9 @@ function SongList({ songs }: { songs:Song[] }){
 
         {songs && ( 
           songs.map((song) => (
-            <SC.ListBox key={song.guid} active={(player.musicID === song.guid )}>
+            <SC.ListBox key={song.guid} active={(player.activeSongGuid === song.guid && playlistGuid === player.activePlaylistGuid )}>
               <SC.Id onClick={() => {  handleClickStart(song.guid); }}>
-                { player.musicID === song.guid && player.state === PLAYER_STATUS.PLAYING ? (
+                { ( player.activeSongGuid === song.guid && player.state === PLAYER_STATUS.PLAYING && playlistGuid === player.activePlaylistGuid ) ? (
                   <FontAwesomeIcon icon={faPause} />
                 ) : (
                   <FontAwesomeIcon icon={faPlay} />

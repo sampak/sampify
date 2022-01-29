@@ -11,7 +11,7 @@ function useMusic() {
   const dispatch =  useDispatch();
 
   // Problem to solved user must wait to end download song
-  const fetch = async (musicID: string, partID: number = 0, contentSize: number|null = null, parts: Blob[] = []) => { // In the future in this hook we can easly implement authorize with backend
+  const fetch = async (songGuid: string, playListGuid: string, partID: number = 0, contentSize: number|null = null, parts: Blob[] = []) => { // In the future in this hook we can easly implement authorize with backend
     let range:number = (CHUNK_SIZE) * partID;
     if(contentSize && range > contentSize){
       if(!!!parts.length) {
@@ -19,7 +19,7 @@ function useMusic() {
         return;
       }
       // setBlob(URL.createObjectURL(new Blob(parts)));
-      dispatch(setBlob({ blob: URL.createObjectURL(new Blob(parts)), musicID: musicID}));
+      dispatch(setBlob({ blob: URL.createObjectURL(new Blob(parts)), activePlaylistGuid: playListGuid, activeSongGuid: songGuid}));
       dispatch(setPlayerState(PLAYER_STATUS.LOADED_WAITING));
       parts = [];
       return;
@@ -29,14 +29,14 @@ function useMusic() {
       range: String(range)
     }
 
-    const result = await axios.get(`${MUSIC_SRC}/${musicID}`, {
+    const result = await axios.get(`${MUSIC_SRC}/${songGuid}`, {
       headers,
       responseType: 'blob'
     });
 
     const HeaderContentSize = Number(result.headers['content-size']);
     parts.push(result.data);
-    fetch(musicID, partID + 1, HeaderContentSize, parts);
+    fetch(songGuid, playListGuid, partID + 1, HeaderContentSize, parts);
   }
 
   return { blob, fetch }

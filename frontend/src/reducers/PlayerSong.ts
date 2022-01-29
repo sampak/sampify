@@ -14,33 +14,36 @@ export enum PLAYER_STATUS {
   WAITING_FOR_CHANGE = 'WAITING_FOR_CHANGE',
 }
 
-interface STATE {
+export interface PlayerSongProps {
   blob: string | null;
-  musicID: number;
-  state: PLAYER_STATUS
+  state: PLAYER_STATUS,
+  activePlaylistGuid: string,
+  activeSongGuid: string|null,
 }
 
-const DEFAULT_STATE:STATE = {
+export const DEFAULT_PLAYER_SONG:PlayerSongProps = {
   blob: null,
-  musicID: 1,
-  state: PLAYER_STATUS.NOT_LOADED
+  state: PLAYER_STATUS.NOT_LOADED,
+  activePlaylistGuid: 'ALL_SONG',
+  activeSongGuid: null
 };
 
-export const PlayerSong = (state:STATE = DEFAULT_STATE, action:any) => {
+export const PlayerSong = (state:PlayerSongProps = DEFAULT_PLAYER_SONG, action:any) => {
   switch (action.type) {
-      case actions.SET_BLOB: 
-          return { 
-            ...state,
-            blob: action.payload.blob,
-            musicID: action.payload.musicID
-            
-           }
-      case actions.SET_STATE: 
-          return { 
-            ...state,
-            state: action.payload  
+    case actions.SET_BLOB: 
+        return { 
+          ...state,
+          blob: action.payload.blob,
+          activePlaylistGuid: action.payload.activePlaylistGuid,
+          activeSongGuid: action.payload.activeSongGuid
+          
           }
-      default: 
-        return state;
+    case actions.SET_STATE: 
+        return { 
+          ...state,
+          state: action.payload  
+        }
+    default: 
+      return state;
   }
 }

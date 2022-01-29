@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 // import axios from 'axios';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './store';
@@ -12,23 +12,36 @@ import { LikedRoutes } from './modules/Liked';
 import { HomeRoutes } from './modules/Home';
 import Layout from './components/Layout';
 import Audio from './components/Audio/Audio';
+import { AudioProvider } from './components/AudioProvider';
 const queryClient = new QueryClient();
+
+interface AudioStoreProps {
+  blob: string|null
+}
+
+const DEFAULT_AUDIO_STORE:AudioStoreProps = {
+  blob: null
+};
+
 
 function App(){
   return(
     <Provider store={store}>
+        
       <QueryClientProvider client={queryClient}>
-        <Layout>
-          <BrowserRouter>
-            <Routes>
-              { HomeRoutes }
-              { LikedRoutes }
-              { AuthRoutes }
-            </Routes>
-          </BrowserRouter>
-        </Layout>
-        <Audio />
-        <ReactQueryDevtools />
+        <AudioProvider>
+            <BrowserRouter>
+              <Layout>
+                <Routes>
+                  { HomeRoutes }
+                  { LikedRoutes }
+                  { AuthRoutes }
+                </Routes>
+              </Layout>
+            </BrowserRouter>
+          <Audio />
+          <ReactQueryDevtools />
+        </AudioProvider>
       </QueryClientProvider>
     </Provider>
   )

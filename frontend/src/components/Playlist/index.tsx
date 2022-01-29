@@ -4,7 +4,7 @@ import { faPlay, faHeart, faSearch, faEllipsisH, faPause } from '@fortawesome/fr
 import { useDispatch, useSelector } from 'react-redux';
 import { SongList } from '../SongList';
 import Lottie from 'lottie-react';
-import { PLAYER_STATUS } from '../../reducers/PlayerSong';
+import { PlayerSongProps, PLAYER_STATUS } from '../../reducers/PlayerSong';
 import * as SC from './Playlist.styled';
 import Album from '../../assets/album.jpg'; // Mocked
 import { setPlayerState } from '../../actions';
@@ -17,16 +17,17 @@ import { milisToHoursAndSeconds } from '../../utils/duration';
 
 interface PlaylistProps {
   songs: Song[],
+  playlistGuid: string
   refetch: () => void 
 }
 
-function Playlist({ songs, refetch }: PlaylistProps){
+function Playlist({ songs, playlistGuid, refetch }: PlaylistProps){
   const [dragFile, setDragFile] = useState(false);
   const [sendingFile, setSendingFile] = useState(false);
   const { mutate, isLoading } = useInsertSong();
   const dispatch = useDispatch();
   const MusicHook = useMusic();
-  const player:any = useSelector((state: any) => state.PlayerSong);
+  const player:PlayerSongProps = useSelector((state: any) => state.PlayerSong);
 
   const durationInMs = useMemo(() => { //TODO Rewrite! 
     let d = 0;
@@ -38,32 +39,22 @@ function Playlist({ songs, refetch }: PlaylistProps){
     return Number(d);
   }, [songs]);
 
-  const getNextSong = () => { // Change to global becouse when use be on the other page then music can't be swapped
-    const index = songs.findIndex(song => ( player.musicID === song.guid));
-    const newSong = songs[index + 1] ?? null;
-    if(!newSong) {
-      return songs[0];
-    } 
-    return newSong;
-
-  }
-
-  useEffect(() => {
-    if(player.state === PLAYER_STATUS.WAITING_FOR_CHANGE){
-      const song = getNextSong();
-      MusicHook.fetch(song.guid);
-    }
-  }, [player.state]);
-
   const handleClickPlayButton = () => {
+
+    if(playlistGuid !== player.activePlaylistGuid){
+      MusicHook.fetch(songs[0].guid ?? '', playlistGuid);
+      return;
+    }
+    
     if(player.state === PLAYER_STATUS.STOPPED){
-      if(player.musicID && player.blob) {
+      if(player.activeSongGuid && player.blob) {
         dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STARTED));
         return;
       }
     }
     if(player.state === PLAYER_STATUS.NOT_LOADED){
-      MusicHook.fetch(songs[0].guid ?? ''); // TODO when user doesn't have saved music in localStorage and is not loaded in audio player then catch opened playlist and start first song
+      MusicHook.fetch(songs[0].guid ?? '', playlistGuid);
+      return;
     }
     dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED));
   }
@@ -83,7 +74,6 @@ function Playlist({ songs, refetch }: PlaylistProps){
         payload: formData,
        }, {
         onSuccess: () => {
-          console.log("success")
           setDragFile(false);
           setSendingFile(false);
           refetch();
@@ -91,7 +81,6 @@ function Playlist({ songs, refetch }: PlaylistProps){
         onError: () => {
           setDragFile(false);
           setSendingFile(false);
-          console.log('error');
         }
       })
     }
@@ -144,10 +133,10 @@ function Playlist({ songs, refetch }: PlaylistProps){
 
         <SC.Settings>
           <SC.Box onClick={handleClickPlayButton}>
-            {player.state !== PLAYER_STATUS.PLAYING ? (
-              <FontAwesomeIcon icon={faPlay} />
-            ) : ( 
-              <FontAwesomeIcon icon={faPause} />
+            { (player.state === PLAYER_STATUS.PLAYING && player.activePlaylistGuid === playlistGuid) ? (
+                <FontAwesomeIcon icon={faPause} />
+              ) : ( 
+                <FontAwesomeIcon icon={faPlay} />
             )}
           
           
@@ -159,7 +148,7 @@ function Playlist({ songs, refetch }: PlaylistProps){
 
 
       <SC.SongList>
-        <SongList songs={songs} />
+        <SongList playlistGuid={playlistGuid} songs={songs} />
 
       </SC.SongList>
     </SC.Playlist>

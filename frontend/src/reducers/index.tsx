@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import { LikedSongs } from './LikedSongs';
+import { Playlists } from './Playlists';
 import { PlayerSong } from './PlayerSong';
 
 
 export default combineReducers({
-    LikedSongs,
+    Playlists,
     PlayerSong
 });
