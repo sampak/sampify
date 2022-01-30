@@ -6,13 +6,19 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 @Entity()
-export class Songs {
+export class Users {
   @PrimaryGeneratedColumn('uuid')
   guid: string;
   @Column(null, { nullable: false })
-  title: string;
-  @Column(null, { nullable: true })
-  duration: number;
+  login: string;
+  @Column(null, { nullable: false })
+  nickname: string;
+  @Column(null, { nullable: false })
+  email: string;
+  @Column(null, { nullable: false, select: false })
+  password: string;
+  @Column(null, { nullable: false, default: false })
+  verifed: boolean;
   @Column({
     name: 'updated_at',
     default: () => 'now()',
@@ -22,6 +28,4 @@ export class Songs {
   @Column({ name: 'created_at', default: () => `now()` })
   created_at?: Date;
 
-
-  
 }

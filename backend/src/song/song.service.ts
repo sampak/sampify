@@ -17,20 +17,21 @@ export class SongService {
   }
 
 
-  async insert(file){
+  async insert(file){ // Rework error handling
     const splittedName = file.originalname.split('.');
     const fileName = splittedName[0] ?? file.originalname;
     const fileType = splittedName[splittedName.length - 1] ?? 'mp3';
     const duration = await getMP3Duration(file.buffer);
     try {
-    const songInsert = this.songRepository.create();
-    songInsert.title = fileName;
-    songInsert.duration = duration;
-    const result = await this.songRepository.save(songInsert);
-    if(!result.guid){
-      console.error('Insert failed [2]', result);
-      return false;
-    } 
+      const saveSong = {
+        title: fileName,
+        duration: duration
+      }
+      const result = await this.songRepository.save(saveSong);
+      if(!result.guid){
+        console.error('Insert failed [2]', result);
+        return false;
+      } 
     try {
       await fs.mkdirSync(`public/${result.guid}`); 
       await fs.writeFileSync(`public/${result.guid}/raw.${fileType}`, file.buffer) // Add checking file type

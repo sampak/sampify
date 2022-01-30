@@ -2,6 +2,7 @@ export default {
   development: {
     frontendUrl: 'http://localhost:3000',
     JWT_SECRET: 'U2FtcGFrdGhlYmVzdA==',
+    JWT_EXPIRE_TIME: 600 * 600,
     database: {
       type: String('mysql'),
       host: 'localhost',
@@ -18,6 +19,7 @@ export default {
   production: {
     frontendUrl: 'c',
     JWT_SECRET: 'c=cccccadcc=',
+    JWT_EXPIRE_TIME: 1 * 1,
     database: {
       type: String('mysql'),
       host: 'db',
