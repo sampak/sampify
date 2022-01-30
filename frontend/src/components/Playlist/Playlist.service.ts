@@ -2,7 +2,7 @@ import { useMutation } from 'react-query'
 import { axiosInstance } from '../../services/axios'
 import Song from '../../interfaces/Song'
 
-async function insertSong({ payload }: any): Promise<Song[]> {
+async function insertSong({ payload }: { payload: FormData }): Promise<Song[]> {
   const { data: response } = await axiosInstance.post('/song', payload)
   return response.data
 }

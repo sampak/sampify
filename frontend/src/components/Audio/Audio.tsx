@@ -1,6 +1,6 @@
 import { useRef, useEffect, useContext, useState } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
-import { useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { setPlayerState } from '../../actions'
 import useMusic from '../../hooks/useMusic'
 import { Playlist } from '../../interfaces/Playlist'
@@ -13,7 +13,9 @@ function Audio() {
     parseFloat(localStorage.getItem('audio_volume') ?? '0.5')
   )
   const [_, setLastSongBlob] = useState<string | null>(null)
-  const playlists: Playlist[] = useSelector((state: any) => state.Playlists)
+  const playlists: Playlist[] = useSelector(
+    (state: RootStateOrAny) => state.Playlists
+  )
   const dispatch = useDispatch()
   const MusicHook = useMusic()
   const player: any = useRef()
@@ -25,11 +27,13 @@ function Audio() {
 
   useEffect(() => {
     if (!player.current) return
+
     if (
-      playerSong.state === PLAYER_STATUS.LOADED_WAITING &&
-      player.current.isPlaying() === false
+      playerSong.state === PLAYER_STATUS.WAITING_TO_STOPPED &&
+      player.current.isPlaying() === true
     ) {
-      player.current.audio.current.play()
+      player.current.audio.current.pause()
+      dispatch(setPlayerState(PLAYER_STATUS.STOPPED))
       return
     }
 
@@ -38,14 +42,7 @@ function Audio() {
       player.current.isPlaying() === false
     ) {
       player.current.audio.current.play()
-      return
-    }
-
-    if (
-      playerSong.state === PLAYER_STATUS.WAITING_TO_STOPPED &&
-      player.current.isPlaying() === true
-    ) {
-      player.current.audio.current.pause()
+      dispatch(setPlayerState(PLAYER_STATUS.PLAYING))
       return
     }
   }, [playerSong.state])
@@ -92,7 +89,7 @@ function Audio() {
     <AudioPlayer
       ref={player}
       autoPlay={false}
-      autoPlayAfterSrcChange={false}
+      autoPlayAfterSrcChange={true}
       showSkipControls
       showJumpControls={false}
       showDownloadProgress={false}

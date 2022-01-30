@@ -9,8 +9,8 @@ export enum PLAYER_STATUS {
   ERROR = 'ERROR',
   LOADED_WAITING = 'LOADED_WAITING',
   NOT_LOADED = 'NOT_LOADED',
-  WAITING_TO_STOPPED = 'WAITING_TOP_STOPPED',
-  WAITING_TO_STARTED = 'WAITING_TOP_STARTED',
+  WAITING_TO_STOPPED = 'WAITING_TO_STOPPED',
+  WAITING_TO_STARTED = 'WAITING_TO_STARTED',
   WAITING_FOR_CHANGE = 'WAITING_FOR_CHANGE',
 }
 
@@ -30,7 +30,7 @@ export const DEFAULT_PLAYER_SONG: PlayerSongProps = {
 
 export const PlayerSong = (
   state: PlayerSongProps = DEFAULT_PLAYER_SONG,
-  action: any
+  action: { type: string; payload: PlayerSongProps }
 ) => {
   switch (action.type) {
     case actions.SET_BLOB:

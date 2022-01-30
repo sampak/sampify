@@ -8,7 +8,7 @@ import {
   faPause,
 } from '@fortawesome/free-solid-svg-icons'
 import useMusic from '../../hooks/useMusic'
-import { useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { PlayerSongProps, PLAYER_STATUS } from '../../reducers/PlayerSong'
 
 import Song from '../../interfaces/Song'
@@ -22,11 +22,13 @@ function SongList({
   songs: Song[]
   playlistGuid: string
 }) {
-  const player: PlayerSongProps = useSelector((state: any) => state.PlayerSong)
+  const player: PlayerSongProps = useSelector(
+    (state: RootStateOrAny) => state.PlayerSong
+  )
   const dispatch = useDispatch()
   const MusicHook = useMusic()
 
-  const handleClickStart = (songGuid: any) => {
+  const handleClickStart = (songGuid: string) => {
     if (playlistGuid !== player.activePlaylistGuid) {
       dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED))
       MusicHook.fetch(songGuid, playlistGuid)

@@ -3,12 +3,18 @@ import * as playlistReducer from '../reducers/Playlists'
 
 import { Playlist } from '../interfaces/Playlist'
 
-export const setBlob = (song: any) => ({
+interface SetBlobProps {
+  blob: string
+  activePlaylistGuid: string
+  activeSongGuid: string
+}
+
+export const setBlob = (song: SetBlobProps) => ({
   type: songReducer.actions.SET_BLOB,
   payload: song,
 })
 
-export const setPlayerState = (state: any) => ({
+export const setPlayerState = (state: songReducer.PLAYER_STATUS) => ({
   type: songReducer.actions.SET_STATE,
   payload: state,
 })

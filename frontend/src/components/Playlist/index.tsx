@@ -7,7 +7,7 @@ import {
   faEllipsisH,
   faPause,
 } from '@fortawesome/free-solid-svg-icons'
-import { useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { SongList } from '../SongList'
 import Lottie from 'lottie-react'
 import { PlayerSongProps, PLAYER_STATUS } from '../../reducers/PlayerSong'
@@ -33,7 +33,9 @@ function Playlist({ songs, playlistGuid, refetch }: PlaylistProps) {
   const { mutate } = useInsertSong()
   const dispatch = useDispatch()
   const MusicHook = useMusic()
-  const player: PlayerSongProps = useSelector((state: any) => state.PlayerSong)
+  const player: PlayerSongProps = useSelector(
+    (state: RootStateOrAny) => state.PlayerSong
+  )
 
   const durationInMs = useMemo(() => {
     //TODO Rewrite!
@@ -94,7 +96,7 @@ function Playlist({ songs, playlistGuid, refetch }: PlaylistProps) {
     }
   }
 
-  const handleOnDrag = (e: any) => {
+  const handleOnDrag = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
   }

@@ -7,7 +7,10 @@ export const actions = {
 
 const DEFAULT_STATE: Playlist[] = []
 
-export const Playlists = (state = DEFAULT_STATE, action: any) => {
+export const Playlists = (
+  state = DEFAULT_STATE,
+  action: { type: string; payload: Playlist }
+) => {
   switch (action.type) {
     case actions.ADD_PLAYLIST:
       return state.concat(action.payload)

@@ -1,18 +1,31 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { addPlaylist, updatePlaylist } from '../../actions'
 import Playlist from '../../components/Playlist'
 import { Playlist as PlaylistInterface } from '../../interfaces/Playlist'
 import { useSongs } from './Home.service'
+import * as userService from '../../services/user';
+import { useNavigate } from 'react-router-dom'
 function Home() {
+  const navigate = useNavigate();
   const { data: songs, refetch: refetchHome } = useSongs()
   const dispatch = useDispatch()
-  const playlists: any = useSelector((state: any) => state.Playlists)
+  const playlists: PlaylistInterface[] = useSelector(
+    (state: RootStateOrAny) => state.Playlists
+  )
   const playlist = playlists.find(
-    (playlist: PlaylistInterface) => playlist.playlistGuid === 'ALL_SONGS'
+    (playlist) => playlist.playlistGuid === 'ALL_SONGS'
   )
 
+
   useEffect(() => {
+    const token = userService.getToken();
+  
+    if(token.length === 0){
+      navigate('/login');
+      return;
+    }
+
     const newPlaylist = {
       playlistGuid: 'ALL_SONGS',
       songs: songs ?? [],

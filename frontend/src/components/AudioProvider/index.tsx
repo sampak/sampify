@@ -1,5 +1,5 @@
 import { createContext, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { RootStateOrAny, useSelector } from 'react-redux'
 import useMusic from '../../hooks/useMusic'
 import { Playlist } from '../../interfaces/Playlist'
 import {
@@ -11,9 +11,13 @@ import { getNextSong } from '../../utils/playlists'
 
 export const AudioContext = createContext(DEFAULT_PLAYER_SONG)
 
-export const AudioProvider = ({ children }: { children: any }) => {
-  const player: PlayerSongProps = useSelector((state: any) => state.PlayerSong)
-  const playlists: Playlist[] = useSelector((state: any) => state.Playlists)
+export const AudioProvider = ({ children }: { children: JSX.Element[] }) => {
+  const player: PlayerSongProps = useSelector(
+    (state: RootStateOrAny) => state.PlayerSong
+  )
+  const playlists: Playlist[] = useSelector(
+    (state: RootStateOrAny) => state.Playlists
+  )
   const MusicHook = useMusic()
 
   useEffect(() => {

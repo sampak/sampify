@@ -1,58 +1,42 @@
-import { useState } from 'react'
-import axios, { AxiosRequestHeaders } from 'axios'
+import { useEffect, useState } from 'react'
+import { useRequest } from './Music.service'
 import { useDispatch } from 'react-redux'
 import { setBlob, setPlayerState } from '../actions'
 import { PLAYER_STATUS } from '../reducers/PlayerSong'
-const CHUNK_SIZE = 10 ** 6 // TODO MOVE TO ENV
-const MUSIC_SRC = 'http://localhost:4000/stream'
+const MUSIC_SRC =
+  process.env.REACT_APP_STREAM_URL ?? 'http://localhost:4000/stream'
 
 function useMusic() {
-  const [blob] = useState<string | null>(null)
+  const [songGuid, setSongGuid] = useState('')
+  const [playlistGuid, setPlaylistGuid] = useState('')
   const dispatch = useDispatch()
+  const { data: requestData, refetch: fetchRequest } = useRequest(songGuid)
 
-  // Problem to solved user must wait to end download song
-  const fetch = async (
-    songGuid: string,
-    playListGuid: string,
-    partID: number = 0,
-    contentSize: number | null = null,
-    parts: Blob[] = []
-  ) => {
-    // In the future in this hook we can easly implement authorize with backend
-    let range: number = CHUNK_SIZE * partID
-    if (contentSize && range > contentSize) {
-      if (!!!parts.length) {
-        console.error('Fetching error')
-        return
-      }
-      // setBlob(URL.createObjectURL(new Blob(parts)));
-      dispatch(
-        setBlob({
-          blob: URL.createObjectURL(new Blob(parts)),
-          activePlaylistGuid: playListGuid,
-          activeSongGuid: songGuid,
-        })
-      )
-      dispatch(setPlayerState(PLAYER_STATUS.LOADED_WAITING))
-      parts = []
-      return
-    }
+  useEffect(() => {
+    if (!requestData || !requestData.guid) return
+    dispatch(
+      setBlob({
+        blob: `${MUSIC_SRC}/${requestData.guid}`,
+        activePlaylistGuid: playlistGuid,
+        activeSongGuid: songGuid,
+      })
+    )
+    dispatch(setPlayerState(PLAYER_STATUS.LOADED_WAITING))
+  }, [requestData])
 
-    const headers: AxiosRequestHeaders = {
-      range: String(range),
-    }
+  useEffect(() => {
+    if (songGuid.length === 0) return
+    fetchRequest()
+  }, [songGuid])
 
-    const result = await axios.get(`${MUSIC_SRC}/${songGuid}`, {
-      headers,
-      responseType: 'blob',
-    })
+  const fetch = async (newSongGuid: string, newPlaylistGuid: string) => {
+    dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED))
 
-    const HeaderContentSize = Number(result.headers['content-size'])
-    parts.push(result.data)
-    fetch(songGuid, playListGuid, partID + 1, HeaderContentSize, parts)
+    setSongGuid(newSongGuid)
+    setPlaylistGuid(newPlaylistGuid)
   }
 
-  return { blob, fetch }
+  return { fetch }
 }
 
 export default useMusic

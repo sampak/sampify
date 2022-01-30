@@ -19,7 +19,10 @@ export interface User {
   name?: string
 }
 
-export const user = (state: User = {}, action: any) => {
+export const user = (
+  state: User = {},
+  action: { type: string; payload: any }
+) => {
   switch (action.type) {
     case actions.USER_LOGGED:
       return { ...action.payload }
