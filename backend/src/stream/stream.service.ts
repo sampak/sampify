@@ -9,13 +9,11 @@ import * as moment from 'moment';
 export class StreamService {
   constructor(
     @InjectRepository(Requests)
-    private readonly requestsRepository: Repository<Requests>
+    private readonly requestsRepository: Repository<Requests>,
+  ) {}
 
-  ){}
-
-
-  async request(guid: string, currentUser: Users){
-    if(!currentUser || !currentUser.guid){
+  async request(guid: string, currentUser: Users) {
+    if (!currentUser || !currentUser.guid) {
       throw new HttpException('You are not logged!', HttpStatus.FORBIDDEN);
     }
 
@@ -23,28 +21,30 @@ export class StreamService {
       const saveData = {
         userGuid: currentUser.guid,
         songGuid: guid,
-        expiresIn: moment().add(10, 'minutes').format()
-      }
+        expiresIn: moment().add(10, 'minutes').format(),
+      };
 
       return await this.requestsRepository.save(saveData);
-    } catch(e) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (e) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-
   async get(guid: string): Promise<Requests> {
-    if(!guid) {
+    if (!guid) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }
 
-    const request = await this.requestsRepository.findOne({guid});
+    const request = await this.requestsRepository.findOne({ guid });
 
-    if(!request){
+    if (!request) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
-    if(moment(request.expiresIn).isBefore(moment())) {
+    if (moment(request.expiresIn).isBefore(moment())) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 

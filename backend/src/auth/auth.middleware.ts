@@ -1,21 +1,12 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  NestMiddleware,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { AuthService } from './auth.service';
 import config from '../config';
 const env = process.env.NODE_ENV || 'development';
 
 @Injectable()
 export class authMiddleware implements NestMiddleware {
-  constructor(
-    private readonly authService: AuthService,
-  ) {}
+  constructor() {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {

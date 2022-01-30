@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn('uuid')
@@ -27,5 +21,4 @@ export class Users {
   updated_at?: Date;
   @Column({ name: 'created_at', default: () => `now()` })
   created_at?: Date;
-
 }

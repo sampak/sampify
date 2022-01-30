@@ -1,9 +1,9 @@
-import { createParamDecorator, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { CurrentUserPipe } from './CurrentUser.pipe';
 
-const GetUser = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+const GetUser = createParamDecorator((_, ctx: ExecutionContext) => {
   return ctx.switchToHttp().getRequest().headers.authorization;
 });
 
-
-export const CurrentUser = (additionalOptions?: any) => GetUser(additionalOptions, CurrentUserPipe)
+export const CurrentUser = (additionalOptions?: any) =>
+  GetUser(additionalOptions, CurrentUserPipe);

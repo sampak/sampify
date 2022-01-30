@@ -6,6 +6,6 @@ import { SongService } from './song.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Songs])],
   controllers: [SongController],
-  providers: [SongService]
+  providers: [SongService],
 })
 export class SongModule {}

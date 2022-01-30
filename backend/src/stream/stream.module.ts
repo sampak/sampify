@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { authMiddleware } from 'src/auth/auth.middleware';
 import { StreamController } from './stream.controller';
@@ -9,11 +14,9 @@ import { UserService } from 'src/user/user.service';
 import { Requests } from 'src/entities/request.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Users, Requests])
-  ],
+  imports: [TypeOrmModule.forFeature([Users, Requests])],
   controllers: [StreamController],
-  providers: [StreamService, AuthService, UserService]
+  providers: [StreamService, AuthService, UserService],
 })
 export class StreamModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -21,5 +24,4 @@ export class StreamModule implements NestModule {
       .apply(authMiddleware)
       .forRoutes({ path: 'stream/request/:guid', method: RequestMethod.GET });
   }
-
 }

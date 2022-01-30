@@ -10,77 +10,79 @@ import config from '../config';
 const env = process.env.NODE_ENV || 'development';
 @Injectable()
 export class AuthService {
-
   constructor(
     @InjectRepository(Users)
-    private readonly usersRepository: Repository<Users>
-  ){}
-
+    private readonly usersRepository: Repository<Users>,
+  ) {}
 
   async auth(user: userAuthDto) {
     const DBUser = await this.usersRepository.findOne({
       select: ['guid', 'login', 'email', 'password', 'verifed'],
-      where: [
-        {login: user.login},
-        {email: user.login}
-      ]
-      
-    })
+      where: [{ login: user.login }, { email: user.login }],
+    });
 
-
-    if(!DBUser){
-      throw new HttpException('Login or password is incorect', HttpStatus.UNAUTHORIZED);
+    if (!DBUser) {
+      throw new HttpException(
+        'Login or password is incorect',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
-
 
     console.log(user.password);
     console.log(DBUser.password);
-    if(!bcrypt.compareSync(user.password, DBUser.password)){
-      throw new HttpException('Login or password is incorect', HttpStatus.UNAUTHORIZED);
+    if (!bcrypt.compareSync(user.password, DBUser.password)) {
+      throw new HttpException(
+        'Login or password is incorect',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
-    const jwtSignIn = jwt.sign({
-      guid: DBUser.guid,
-      login: DBUser.login,
-      email: DBUser.email,
-      verifed: DBUser.verifed
-    }, config[env].JWT_SECRET, {
-      expiresIn: config[env].JWT_EXPIRE_TIME ?? '1h'
-    });
+    const jwtSignIn = jwt.sign(
+      {
+        guid: DBUser.guid,
+        login: DBUser.login,
+        email: DBUser.email,
+        verifed: DBUser.verifed,
+      },
+      config[env].JWT_SECRET,
+      {
+        expiresIn: config[env].JWT_EXPIRE_TIME ?? '1h',
+      },
+    );
 
     return await {
       access_token: jwtSignIn,
-      expiresIn: config[env].JWT_EXPIRE_TIME ?? '1h'
-    }
+      expiresIn: config[env].JWT_EXPIRE_TIME ?? '1h',
+    };
   }
 
-  async insert(user: userInsertDto){
-      
-      const isUser = await this.usersRepository.findOne({
-        where: [
-          {login: user.login},
-          {email: user.email}
-        ]
-      })
+  async insert(user: userInsertDto) {
+    const isUser = await this.usersRepository.findOne({
+      where: [{ login: user.login }, { email: user.email }],
+    });
 
+    if (isUser) {
+      throw new HttpException(
+        'Login or E-Mail is taken',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-      if(isUser){
-        throw new HttpException('Login or E-Mail is taken', HttpStatus.BAD_REQUEST);
-      }
+    try {
+      const saveUser = {
+        login: user.login,
+        nickname: user.login,
+        email: user.email,
+        password: bcrypt.hashSync(user.password, 10),
+      };
 
-      try {
-
-        const saveUser = {
-          login: user.login,
-          nickname: user.login, 
-          email: user.email,
-          password: bcrypt.hashSync(user.password, 10)
-        };
-
-        console.log(saveUser);
-        return await this.usersRepository.save(saveUser);
-    } catch(e) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      console.log(saveUser);
+      return await this.usersRepository.save(saveUser);
+    } catch (e) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

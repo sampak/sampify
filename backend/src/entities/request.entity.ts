@@ -1,12 +1,8 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Requests {
   @PrimaryGeneratedColumn('uuid')
-  guid: string
+  guid: string;
   @Column(null, { nullable: false })
   userGuid: string;
   @Column(null, { nullable: false })
@@ -21,7 +17,4 @@ export class Requests {
   updated_at?: Date;
   @Column({ name: 'created_at', default: () => `now()` })
   created_at?: Date;
-
-
-  
 }
