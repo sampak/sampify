@@ -12,7 +12,7 @@ export class StreamService {
     private readonly requestsRepository: Repository<Requests>,
   ) {}
 
-  async request(guid: string, currentUser: Users) {
+  async request(songGuid: string, currentUser: Users): Promise<Requests> {
     if (!currentUser || !currentUser.guid) {
       throw new HttpException('You are not logged!', HttpStatus.FORBIDDEN);
     }
@@ -20,7 +20,7 @@ export class StreamService {
     try {
       const saveData = {
         userGuid: currentUser.guid,
-        songGuid: guid,
+        songGuid: songGuid,
         expiresIn: moment().add(10, 'minutes').format(),
       };
 
@@ -45,7 +45,7 @@ export class StreamService {
     }
 
     if (moment(request.expiresIn).isBefore(moment())) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Not Found', HttpStatus.FORBIDDEN);
     }
 
     return request;

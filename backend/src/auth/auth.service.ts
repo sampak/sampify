@@ -15,7 +15,9 @@ export class AuthService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async auth(user: userAuthDto) {
+  async auth(
+    user: userAuthDto,
+  ): Promise<{ access_token: string; expiresIn: string }> {
     const DBUser = await this.usersRepository.findOne({
       select: ['guid', 'login', 'email', 'password', 'verifed'],
       where: [{ login: user.login }, { email: user.login }],
@@ -28,8 +30,6 @@ export class AuthService {
       );
     }
 
-    console.log(user.password);
-    console.log(DBUser.password);
     if (!bcrypt.compareSync(user.password, DBUser.password)) {
       throw new HttpException(
         'Login or password is incorect',
@@ -56,7 +56,7 @@ export class AuthService {
     };
   }
 
-  async insert(user: userInsertDto) {
+  async insert(user: userInsertDto): Promise<Users> {
     const isUser = await this.usersRepository.findOne({
       where: [{ login: user.login }, { email: user.email }],
     });

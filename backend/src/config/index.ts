@@ -12,7 +12,7 @@ export default {
       database: 'sampify',
       autoLoadEntities: true,
       synchronize: true,
-      logging: true,
+      logging: false,
     },
   },
 

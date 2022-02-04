@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { StreamService } from './stream.service';
 import * as fs from 'fs';
-import { CurrentUser } from 'src/user/currentUser.decorator';
+import { CurrentUser } from 'src/user/CurrentUser.decorator';
 import { Users } from 'src/entities/user.entity';
 const CHUNK_SIZE = 10 ** 6; // 1MB to config maybe
 
@@ -16,9 +16,12 @@ const CHUNK_SIZE = 10 ** 6; // 1MB to config maybe
 export class StreamController {
   constructor(private readonly streamService: StreamService) {}
 
-  @Get('/request/:guid')
-  async Request(@CurrentUser() user: Users, @Param('guid') guid: string) {
-    return await this.streamService.request(guid, user);
+  @Get('/request/:songGuid')
+  async Request(
+    @CurrentUser() user: Users,
+    @Param('songGuid') songGuid: string,
+  ) {
+    return await this.streamService.request(songGuid, user);
   }
 
   @Get('/:guid')

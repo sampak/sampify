@@ -1,12 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
-export class Songs {
+export class User_Liked_Songs {
   @PrimaryGeneratedColumn('uuid')
   guid: string;
   @Column(null, { nullable: false })
-  title: string;
-  @Column(null, { nullable: true })
-  duration: number;
+  userGuid: string;
+  @Column(null, { nullable: false })
+  songGuid: string;
   @Column({
     name: 'updated_at',
     default: () => 'now()',
@@ -15,7 +15,4 @@ export class Songs {
   updated_at?: Date;
   @Column({ name: 'created_at', default: () => `now()` })
   created_at?: Date;
-
-  liked?: boolean;
-  likedGuid?: string;
 }
