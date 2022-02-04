@@ -1,20 +1,25 @@
 import { useRef, useEffect, useContext, useState } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setPlayerState } from '../../actions'
 import useMusic from '../../hooks/useMusic'
 import { Playlist } from '../../interfaces/Playlist'
+import { RootState } from '../../reducers'
 import { PLAYER_STATUS } from '../../reducers/PlayerSong'
 import '../../styles/audioPlayer.scss'
 import { getNextSong, getPreviouslySong } from '../../utils/playlists'
 import { AudioContext } from '../AudioProvider'
+
+// Possible problem when user stop audio for example in 0:20 and try to resume song after 10 minutes can get FORBIDDEN due to token expire
+// What we need todo is when audio get error try to create again authorization token and resume the player
+
 function Audio() {
   const [volume, setVolume] = useState(
     parseFloat(localStorage.getItem('audio_volume') ?? '0.5')
   )
   const [_, setLastSongBlob] = useState<string | null>(null)
   const playlists: Playlist[] = useSelector(
-    (state: RootStateOrAny) => state.Playlists
+    (state: RootState) => state.Playlists
   )
   const dispatch = useDispatch()
   const MusicHook = useMusic()
@@ -28,22 +33,19 @@ function Audio() {
   useEffect(() => {
     if (!player.current) return
 
-    if (
-      playerSong.state === PLAYER_STATUS.WAITING_TO_STOPPED &&
-      player.current.isPlaying() === true
-    ) {
-      player.current.audio.current.pause()
-      dispatch(setPlayerState(PLAYER_STATUS.STOPPED))
-      return
-    }
-
-    if (
-      playerSong.state === PLAYER_STATUS.WAITING_TO_STARTED &&
-      player.current.isPlaying() === false
-    ) {
-      player.current.audio.current.play()
-      dispatch(setPlayerState(PLAYER_STATUS.PLAYING))
-      return
+    switch (playerSong.state) {
+      case PLAYER_STATUS.WAITING_TO_STOPPED:
+        if (!player.current.isPlaying()) return
+        player.current.audio.current.pause()
+        dispatch(setPlayerState(PLAYER_STATUS.STOPPED))
+        break
+      case PLAYER_STATUS.WAITING_TO_STARTED:
+        if (player.current.isPlaying()) return
+        player.current.audio.current.play()
+        dispatch(setPlayerState(PLAYER_STATUS.PLAYING))
+        break
+      default:
+        break
     }
   }, [playerSong.state])
 

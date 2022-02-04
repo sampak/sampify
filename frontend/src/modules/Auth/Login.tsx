@@ -16,7 +16,10 @@ const DEFAULT_VALUES: AuthLoginPayload = {
 function Login() {
   const { mutate } = useAuthLogin()
   const navigate = useNavigate()
-  const handleForm = (payload: AuthLoginPayload, { setSubmitting }: any) => {
+  const handleForm = (
+    payload: AuthLoginPayload,
+    { setSubmitting }: { setSubmitting: (toggle: boolean) => void }
+  ) => {
     mutate(
       {
         payload,

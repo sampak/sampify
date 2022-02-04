@@ -31,27 +31,10 @@ export const List = styled.div`
     border-radius: 10px;
   }
 `
-
-interface ActiveElement {
-  active: boolean
-}
-
-export const ListBox = styled.div<ActiveElement>`
-  display: grid;
-  color: ${(props) => (props.active ? '#FFFFFF' : '#AAAAAA')};
-  text-align: left;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  grid-template-columns: 4rem 1fr 1fr 1fr 8rem 8rem;
-
-  &:hover {
-    color: '#FFFFFF';
-  }
-`
-
 export const Id = styled.div``
 export const Title = styled.div``
 export const Artist = styled.div``
 export const Album = styled.div``
 export const AddDate = styled.div``
 export const Length = styled.div``
+export const SongOptions = styled.div``

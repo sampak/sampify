@@ -28,3 +28,12 @@ export const updatePlaylist = (playlist: Playlist) => ({
   type: playlistReducer.actions.UPDATE_PLAYLIST,
   payload: playlist,
 })
+
+export const updateLiked = (payload: {
+  playlistGuid: string
+  songGuid: string
+  state: boolean
+}) => ({
+  type: playlistReducer.actions.UPDATE_LIKED,
+  payload: payload,
+})

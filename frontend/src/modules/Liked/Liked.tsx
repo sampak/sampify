@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addPlaylist, updatePlaylist } from '../../actions'
 import Playlist from '../../components/Playlist'
 import { Playlist as PlaylistInterface } from '../../interfaces/Playlist'
+import { RootState } from '../../reducers'
 import { useSongs } from './Liked.service'
 
 function Liked() {
-  const { data: songs, refetch: refetchHome } = useSongs()
+  const { data: songs, refetch: refetchLiked } = useSongs()
   const dispatch = useDispatch()
   const playlists: PlaylistInterface[] = useSelector(
-    (state: RootStateOrAny) => state.Playlists
+    (state: RootState) => state.Playlists
   )
   const playlist = playlists.find(
     (playlist) => playlist.playlistGuid === 'LIKED_SONGS'
@@ -31,7 +32,7 @@ function Liked() {
   return (
     <Playlist
       playlistGuid={'LIKED_SONGS'}
-      refetch={refetchHome}
+      refetch={refetchLiked}
       songs={playlist?.songs ?? []}
     />
   )

@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as userService from './user'
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_STREAM_URL ?? 'http://localhost:4000',
+  baseURL: process.env.REACT_APP_API_URL ?? 'http://localhost:4000',
   headers: {
     authorization: userService.getToken(),
   },

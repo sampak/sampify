@@ -1,53 +1,20 @@
 import * as SC from './SongList.styled'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faPlay,
-  faCalendar,
-  faClock,
-  faPause,
-} from '@fortawesome/free-solid-svg-icons'
-import useMusic from '../../hooks/useMusic'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { PlayerSongProps, PLAYER_STATUS } from '../../reducers/PlayerSong'
+import { faCalendar, faClock } from '@fortawesome/free-solid-svg-icons'
 
 import Song from '../../interfaces/Song'
-import { millisToMinutesAndSeconds } from '../../utils/duration'
-import { setPlayerState } from '../../actions'
+import SongBox from '../SongBox'
 
 function SongList({
   songs,
   playlistGuid,
+  refetch,
 }: {
   songs: Song[]
   playlistGuid: string
+  refetch?: () => void
 }) {
-  const player: PlayerSongProps = useSelector(
-    (state: RootStateOrAny) => state.PlayerSong
-  )
-  const dispatch = useDispatch()
-  const MusicHook = useMusic()
-
-  const handleClickStart = (songGuid: string) => {
-    if (playlistGuid !== player.activePlaylistGuid) {
-      dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED))
-      MusicHook.fetch(songGuid, playlistGuid)
-      return
-    }
-
-    if (songGuid === player.activeSongGuid) {
-      if (player.state === PLAYER_STATUS.STOPPED) {
-        dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STARTED))
-        return
-      }
-      if (player.state === PLAYER_STATUS.PLAYING) {
-        dispatch(setPlayerState(PLAYER_STATUS.WAITING_TO_STOPPED))
-        return
-      }
-    }
-    MusicHook.fetch(songGuid, playlistGuid)
-  }
-
   return (
     <SC.SongList>
       <SC.Header>
@@ -66,36 +33,11 @@ function SongList({
       <SC.List>
         {songs &&
           songs.map((song) => (
-            <SC.ListBox
-              key={song.guid}
-              active={
-                player.activeSongGuid === song.guid &&
-                playlistGuid === player.activePlaylistGuid
-              }
-            >
-              <SC.Id
-                onClick={() => {
-                  handleClickStart(song.guid)
-                }}
-              >
-                {player.activeSongGuid === song.guid &&
-                player.state === PLAYER_STATUS.PLAYING &&
-                playlistGuid === player.activePlaylistGuid ? (
-                  <FontAwesomeIcon icon={faPause} />
-                ) : (
-                  <FontAwesomeIcon icon={faPlay} />
-                )}
-              </SC.Id>
-              <SC.Title>{song.title}</SC.Title>
-              <SC.Artist></SC.Artist>
-              <SC.Album></SC.Album>
-              <SC.AddDate style={{ textAlign: 'center' }}>
-                {song.addTime}
-              </SC.AddDate>
-              <SC.Length style={{ textAlign: 'center' }}>
-                {millisToMinutesAndSeconds(song.duration)}
-              </SC.Length>
-            </SC.ListBox>
+            <SongBox
+              refetch={refetch}
+              song={song}
+              playlistGuid={playlistGuid}
+            />
           ))}
       </SC.List>
     </SC.SongList>

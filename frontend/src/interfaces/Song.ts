@@ -3,4 +3,6 @@ export default interface Song {
   title: string | null
   addTime: number
   duration: number
+  liked?: boolean
+  likedGuid?: string
 }
